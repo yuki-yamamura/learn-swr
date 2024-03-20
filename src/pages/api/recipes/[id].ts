@@ -4,7 +4,8 @@ import type { Recipe } from '@/types/Recipe';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const newRecipe = writeJson(req.body as Pick<Recipe, 'title'>);
+  const recipe = req.body as Recipe;
+  writeJson(recipe);
 
-  res.json({ recipe: newRecipe });
+  res.json({ recipe });
 }

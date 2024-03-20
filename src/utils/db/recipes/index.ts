@@ -12,14 +12,9 @@ export function readJson(): Recipe[] {
   return data;
 }
 
-export function writeJson(data: Pick<Recipe, 'title'>): Recipe {
+export function writeJson(recipe: Recipe): void {
   const recipes = readJson();
-  const id = Math.max(...recipes.map((recipe) => recipe.id)) + 1;
-  const { title } = data;
 
-  const newRecipe = { id, title };
-  const newRecipes = [...recipes, newRecipe];
+  const newRecipes = [...recipes, recipe];
   fs.writeFileSync(jsonPath, JSON.stringify(newRecipes));
-
-  return newRecipe;
 }
