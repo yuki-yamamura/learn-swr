@@ -1,33 +1,30 @@
-import { useRecipes } from '@/hooks/useRecipes';
-import axios from 'axios';
-import { useRef } from 'react';
+import { useRecipe } from '@/hooks/useRecipe';
+import { useRef, useState } from 'react';
 
 const RecipeForm = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { recipes, mutate } = useRecipes();
+  const defaultTitle = '';
+  const [title, setTitle] = useState(defaultTitle);
+  const { createRecipe } = useRecipe();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
     if (!inputRef.current) return;
+    if (title === defaultTitle) return;
+    e.preventDefault();
 
-    const id =
-      recipes.length === 0
-        ? 1
-        : Math.max(...recipes.map((recipe) => recipe.id)) + 1;
-    const recipe = {
-      id,
-      title: inputRef.current.value,
-    };
-    await axios.post(`/api/recipes/${id}`, recipe);
-    await mutate();
+    await createRecipe(title);
 
-    inputRef.current.value = '';
+    setTitle(defaultTitle);
     inputRef.current.focus();
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" ref={inputRef} />
+      <input type="text" ref={inputRef} value={title} onChange={handleChange} />
       <button type="submit">Add</button>
     </form>
   );
