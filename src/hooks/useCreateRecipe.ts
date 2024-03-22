@@ -2,7 +2,7 @@ import { useRecipes } from '@/hooks/useRecipes';
 import axios from 'axios';
 import useSWRMutation from 'swr/mutation';
 
-export const useRecipe = () => {
+export const useCreateRecipe = () => {
   const { recipes, mutate } = useRecipes();
   const id =
     recipes.length === 0

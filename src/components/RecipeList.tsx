@@ -1,3 +1,4 @@
+import RecipeItem from './RecipeItem';
 import { useRecipes } from '@/hooks/useRecipes';
 
 const RecipeList = () => {
@@ -5,8 +6,8 @@ const RecipeList = () => {
 
   return (
     <ul>
-      {recipes.map(({ id, title }) => (
-        <li key={id}>{title}</li>
+      {recipes.map((recipe) => (
+        <RecipeItem recipe={recipe} key={recipe.id} />
       ))}
     </ul>
   );

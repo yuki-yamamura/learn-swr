@@ -1,11 +1,11 @@
-import { useRecipe } from '@/hooks/useRecipe';
+import { useCreateRecipe } from '@/hooks/useCreateRecipe';
 import { useRef, useState } from 'react';
 
 const RecipeForm = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const defaultTitle = '';
   const [title, setTitle] = useState(defaultTitle);
-  const { createRecipe } = useRecipe();
+  const { createRecipe } = useCreateRecipe();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
