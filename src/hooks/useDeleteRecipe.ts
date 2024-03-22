@@ -8,9 +8,12 @@ type Props = Pick<Recipe, 'id'>;
 
 export const useDeleteRecipe = ({ id }: Props) => {
   const { mutate } = useSWRConfig();
-  const { trigger } = useSWRMutation(`/api/recipes/${id}`, async (url) => {
-    await axios.delete(url);
-  });
+  const { trigger, error, isMutating } = useSWRMutation<void, Error>(
+    `/api/recipes/${id}`,
+    async (url: string) => {
+      await axios.delete(url);
+    },
+  );
 
   const deleteRecipe = async () => {
     await trigger();
@@ -19,5 +22,7 @@ export const useDeleteRecipe = ({ id }: Props) => {
 
   return {
     deleteRecipe,
+    error,
+    isMutating,
   };
 };

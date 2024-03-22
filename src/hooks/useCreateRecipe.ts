@@ -2,6 +2,8 @@ import { useRecipes } from '@/hooks/useRecipes';
 import axios from 'axios';
 import useSWRMutation from 'swr/mutation';
 
+import type { Key } from 'swr';
+
 export const useCreateRecipe = () => {
   const { recipes, mutate } = useRecipes();
   const id =
@@ -9,16 +11,18 @@ export const useCreateRecipe = () => {
       ? 1
       : Math.max(...recipes.map((recipe) => recipe.id)) + 1;
 
-  const { trigger } = useSWRMutation(
-    `/api/recipes/${id}`,
-    async (url, { arg }: { arg: string }) => {
-      const recipe = {
-        id,
-        title: arg,
-      };
-      await axios.post(url, recipe);
-    },
-  );
+  const { trigger, error, isMutating } = useSWRMutation<
+    void,
+    Error,
+    Key,
+    string
+  >(`/api/recipes/${id}`, async (url: string, { arg }: { arg: string }) => {
+    const recipe = {
+      id,
+      title: arg,
+    };
+    await axios.post(url, recipe);
+  });
 
   const createRecipe = async (title: string) => {
     await trigger(title);
@@ -27,5 +31,7 @@ export const useCreateRecipe = () => {
 
   return {
     createRecipe,
+    error,
+    isMutating,
   };
 };
